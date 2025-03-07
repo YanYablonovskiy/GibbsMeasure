@@ -32,24 +32,27 @@ variable (f1 g1 : X → ℝ)
 #check integral_indicator
 #check integral_const
 #check lintegral_indicator
-
+#check integral_indicator
+#check integral_indicator_const
+#check indicator
 
 lemma IsProper.integral_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 ≤ 𝓧) (f g : X → ℝ) (x₀ : X)
     (hf : Integrable[𝓧] f (π x₀)) (hg : Integrable[𝓑] (f * g) (@Measure.map _ _ 𝓧 𝓑 id (π x₀))) :
     ∫ x, f x * g x ∂(π x₀) = g x₀ * ∫ x, f x ∂(π x₀) := by
-      apply  Integrable.induction (α:=X) (E:=ℝ) (μ:=(π x₀)) ( fun h ↦ Integrable[𝓧] h (π x₀) → 
-      ∫ x, h x * g x ∂(π x₀) = g x₀ * ∫ x, h x ∂(π x₀)) 
+      apply  Integrable.induction (α:=X) (E:=ℝ) (μ:=(π x₀)) ( fun h ↦ Integrable[𝓧] h (π x₀) →
+      ∫ x, h x * g x ∂(π x₀) = g x₀ * ∫ x, h x ∂(π x₀))
       . intro c S hmS bT hInt
         rw [integral_indicator hmS,integral_const];simp
-        
-         
+
+
 
       . sorry
       · sorry
       . sorry
       repeat simpa
 
-    
+
+
 
 
 
