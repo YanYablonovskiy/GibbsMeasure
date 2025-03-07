@@ -21,6 +21,7 @@ variable {X : Type*} {𝓑 𝓧 : MeasurableSpace X} {π : Kernel[𝓑, 𝓧] X 
 variable (f1 g1 : X → ℝ)
 #check MemLp
 #check Specification.IsProper.lintegral_mul
+#check IsProper.lintegral_mul
 #check Integrable.comp_measurable
 #check IntegrableOn.restrict_toMeasurable
 #check toMeasurable
@@ -28,18 +29,29 @@ variable (f1 g1 : X → ℝ)
 #check Integrable
 #check Integrable.induction
 #check IsClosed
+#check integral_indicator
+#check integral_const
+#check lintegral_indicator
+#check indicator_
+
 
 lemma IsProper.integral_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 ≤ 𝓧) (f g : X → ℝ) (x₀ : X)
     (hf : Integrable[𝓧] f (π x₀)) (hg : Integrable[𝓑] (f * g) (@Measure.map _ _ 𝓧 𝓑 id (π x₀))) :
     ∫ x, f x * g x ∂(π x₀) = g x₀ * ∫ x, f x ∂(π x₀) := by
-      apply  Integrable.induction (α:=X) (E:=ℝ) (μ:=(π x₀)) ( fun _ ↦ ∫ x, f x * g x ∂(π x₀) 
-      = g x₀ * ∫ x, f x ∂(π x₀))
-      case h_ind => 
-         intro y s hms bd
-         sorry
-      case h_closed => sorry 
-      repeat (first | simp | simpa)
+      apply  Integrable.induction (α:=X) (E:=ℝ) (μ:=(π x₀)) ( fun h ↦ Integrable[𝓧] h (π x₀) → 
+      ∫ x, h x * g x ∂(π x₀) = g x₀ * ∫ x, h x ∂(π x₀)) 
+      . intro c S hmS bT hInt
+        rw [integral_indicator,integral_const];simp
+        rw [integral_eq_lintegral_pos_part_sub_lintegral_neg_part]
+        
+         
 
+      . sorry
+      · sorry
+      . sorry
+      repeat simpa
+
+    
 
 
 
