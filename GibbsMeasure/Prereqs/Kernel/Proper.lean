@@ -35,7 +35,7 @@ lemma IsProper.integral_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 ≤ 𝓧) (f g
       apply  Integrable.induction (α:=X) (E:=ℝ) (μ:=(π x₀)) ( fun _ ↦ ∫ x, f x * g x ∂(π x₀) 
       = g x₀ * ∫ x, f x ∂(π x₀))
       case h_ind => 
-         intro y s hms bd --pre-images of y
+         intro y s hms bd
          sorry
       case h_closed => sorry 
       repeat (first | simp | simpa)
