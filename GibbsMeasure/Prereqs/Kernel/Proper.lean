@@ -15,26 +15,6 @@ namespace ProbabilityTheory.Kernel
 variable {X : Type*} {𝓑 𝓧 : MeasurableSpace X} {π : Kernel[𝓑, 𝓧] X X} {A B : Set X}
   {f g : X → ℝ≥0∞} {x₀ : X}
 
-#check MeasureTheory.integral_eq_lintegral_pos_part_sub_lintegral_neg_part
-#check (f * g)
-#check Measure.map id
-variable (f1 g1 : X → ℝ)
-#check MemLp
-#check Specification.IsProper.lintegral_mul
-#check IsProper.lintegral_mul
-#check Integrable.comp_measurable
-#check IntegrableOn.restrict_toMeasurable
-#check toMeasurable
-#check Measurable.aestronglyMeasurable
-#check Integrable
-#check Integrable.induction
-#check IsClosed
-#check integral_indicator
-#check integral_const
-#check lintegral_indicator
-#check integral_indicator
-#check integral_indicator_const
-#check indicator
 
 lemma IsProper.integral_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 ≤ 𝓧) (f g : X → ℝ) (x₀ : X)
     (hf : Integrable[𝓧] f (π x₀)) (hg : Integrable[𝓑] (f * g) (@Measure.map _ _ 𝓧 𝓑 id (π x₀))) :
@@ -43,28 +23,19 @@ lemma IsProper.integral_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 ≤ 𝓧) (f g
       ∫ x, h x * g x ∂(π x₀) = g x₀ * ∫ x, h x ∂(π x₀))
       . intro c S hmS bT hInt
         rw [integral_indicator hmS,integral_const];simp
-
-
-
-      . sorry
-      · sorry
-      . sorry
+        sorry
+      . intro h1 h2 hdjSup hih1 hih2 h1imul h2imul hAddimul
+        simp
+        rw [integral_add hih1 hih2,mul_add]
+        rw [←h1imul hih1,←h2imul hih2]
+        rw [←integral_add (sorry) (sorry)]
+        congr
+        ext v
+        group
+      · sorry        
+      . intro h1 h2 h1aeh2 hih1 imulh1 hih2
+        have:= imulh1 hih1 
+        sorry
       repeat simpa
-
-
-
-
-
-
-/-
-  rw [MeasureTheory.integral_eq_lintegral_pos_part_sub_lintegral_neg_part]
-  . rw [IsProper.lintegral_mul hπ h𝓑𝓧 hf.1]
-  . have: (f * g) =  (fun x ↦ f x * g x)  := by rfl
-    rw [←this]
-    have: Measure.map id (π x₀) = (π x₀) := by exact Measure.map_id
-    rw [←this]
-    sorry
--/
-#check IsProper.integral_mul
 
 end ProbabilityTheory.Kernel
