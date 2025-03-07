@@ -28,14 +28,22 @@ lemma IsProper.integral_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 ≤ 𝓧) (f g
         simp
         rw [integral_add hih1 hih2,mul_add]
         rw [←h1imul hih1,←h2imul hih2]
-        rw [←integral_add (sorry) (sorry)]
+        rw [←integral_add]
         congr
         ext v
         group
+        · sorry
+        . sorry
       · sorry        
       . intro h1 h2 h1aeh2 hih1 imulh1 hih2
-        have:= imulh1 hih1 
+        have := (Filter.eventuallyLE_antisymm_iff.mp h1aeh2).1
+        have := (integral_eq_iff_of_ae_le hih1 hih2 this).mpr h1aeh2
+        rw [←this]
+        have :  h1 * g =ᶠ[ae (π x₀)] h2 * g := by
+          sorry
         sorry
+        --have := (integral_eq_iff_of_ae_le hih1 hih2)
+
       repeat simpa
 
 end ProbabilityTheory.Kernel
