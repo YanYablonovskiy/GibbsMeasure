@@ -20,7 +20,7 @@ variable {X : Type*} {𝓑 𝓧 : MeasurableSpace X} {π : Kernel[𝓑, 𝓧] X 
 #check Measure.map id
 variable (f1 g1 : X → ℝ)
 #check MemLp
-#check  IsProper.lintegral_mul
+#check Specification.IsProper.lintegral_mul
 #check Integrable.comp_measurable
 #check IntegrableOn.restrict_toMeasurable
 #check toMeasurable
@@ -34,12 +34,12 @@ lemma IsProper.integral_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 ≤ 𝓧) (f g
     ∫ x, f x * g x ∂(π x₀) = g x₀ * ∫ x, f x ∂(π x₀) := by
       apply  Integrable.induction (α:=X) (E:=ℝ) (μ:=(π x₀)) ( fun _ ↦ ∫ x, f x * g x ∂(π x₀) 
       = g x₀ * ∫ x, f x ∂(π x₀))
-      ·  intro x s hms bd
+      case h_ind => 
+         intro y s hms bd --pre-images of y
          sorry
-      ·  simp
-      ·  sorry -- closure
-      ·  simp
-      ·  simpa
+      case h_closed => sorry 
+      repeat (first | simp | simpa)
+
 
 
 
