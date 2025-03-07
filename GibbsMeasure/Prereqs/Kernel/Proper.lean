@@ -21,21 +21,21 @@ lemma IsProper.integral_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 ≤ 𝓧) (f g
     ∫ x, f x * g x ∂(π x₀) = g x₀ * ∫ x, f x ∂(π x₀) := by
       apply  Integrable.induction (α:=X) (E:=ℝ) (μ:=(π x₀)) ( fun h ↦ Integrable[𝓧] h (π x₀) →
       ∫ x, h x * g x ∂(π x₀) = g x₀ * ∫ x, h x ∂(π x₀))
-      . intro c S hmS bT hInt
+      · intro c S hmS bT hInt
         rw [integral_indicator hmS,integral_const];simp
         sorry
-      . intro h1 h2 hdjSup hih1 hih2 h1imul h2imul hAddimul
+      · intro h1 h2 hdjSup hih1 hih2 h1imul h2imul hAddimul
         simp
         rw [integral_add hih1 hih2,mul_add]
         rw [←h1imul hih1,←h2imul hih2]
         rw [←integral_add]
-        congr
-        ext v
-        group
+        · congr
+          ext v
+          group
         · sorry
-        . sorry
+        · sorry
       · sorry        
-      . intro h1 h2 h1aeh2 hih1 imulh1 hih2
+      · intro h1 h2 h1aeh2 hih1 imulh1 hih2
         have := (Filter.eventuallyLE_antisymm_iff.mp h1aeh2).1
         have := (integral_eq_iff_of_ae_le hih1 hih2 this).mpr h1aeh2
         rw [←this]
