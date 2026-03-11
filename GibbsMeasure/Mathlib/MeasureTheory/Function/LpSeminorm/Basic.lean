@@ -12,7 +12,7 @@ variable {α ε ε' E F G : Type*} {m m0 : MeasurableSpace α} {p : ℝ≥0∞} 
 
 namespace MeasureTheory
 
-attribute [simp] memLp_top_const MemLp.indicator
+attribute [simp] memLp_top_const
 
 @[simp] lemma memLp_top_one [One E] : MemLp (1 : α → E) ⊤ μ := memLp_top_const _
 
