@@ -79,18 +79,29 @@ private lemma condExp_const_indicator_ae_eq_integral_kernel (c : ℝ) (A_mble : 
   apply foo.symm.trans
   have : c • (fun x₀ ↦ ∫ (a : X), A.indicator (fun x ↦ (1 : ℝ)) a ∂π x₀)
      = fun x₀ ↦ c * ∫ (a : X), A.indicator (fun x ↦ (1 : ℝ)) a ∂π x₀ := by
-    sorry
+    ext; simp [smul_eq_mul]
   rw [← this]
   have := condExp_indicator_ae_eq_integral_kernel (μ := μ) (π := π) A_mble
-  -- change c • μ[A.indicator fun x ↦ 1|𝓑] =ᶠ[ae μ]
-  --   c • (fun x₀ ↦ ∫ (a : X), A.indicator (fun x ↦ 1) a ∂π x₀)
-  sorry
+  exact this.const_smul c
+
+private lemma simpleFunc_integrable (f : @SimpleFunc X 𝓧 ℝ) (ν : Measure[𝓧] X)
+    [IsFiniteMeasure ν] : Integrable (⇑f) ν := by
+  induction f using SimpleFunc.induction with
+  | @const c _s hs =>
+    exact (integrable_indicator_iff hs).mpr integrableOn_const
+  | add _disj hf hg => exact hf.add hg
 
 private lemma condExp_simpleFunc_ae_eq_integral_kernel (f : @SimpleFunc X 𝓧 ℝ) :
     condExp 𝓑 μ f =ᵐ[μ] (fun x₀ ↦ ∫ x, f x ∂(π x₀)) := by
   induction f using SimpleFunc.induction with
-  | const => sorry
-  | add => sorry
+  | @const c _s hs =>
+    exact condExp_const_indicator_ae_eq_integral_kernel c hs
+      (IsCondExp.condExp_ae_eq_kernel_apply hs)
+  | @add f g _disj hf hg =>
+    simp only [SimpleFunc.coe_add]
+    exact (condExp_add (simpleFunc_integrable f μ) (simpleFunc_integrable g μ) 𝓑).trans
+      ((hf.add hg).trans (.of_forall fun x₀ ↦
+        (integral_add (simpleFunc_integrable f (π x₀)) (simpleFunc_integrable g (π x₀))).symm))
 
 lemma condExp_ae_eq_integral_kernel (f : X → ℝ) :
     condExp 𝓑 μ f =ᵐ[μ] (fun x₀ ↦ ∫ x, f x ∂(π x₀)) := sorry
