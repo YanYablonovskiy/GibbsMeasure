@@ -1,6 +1,7 @@
 module
 
 public import Mathlib.MeasureTheory.Function.ConditionalExpectation.Basic
+public import GibbsMeasure.Mathlib.MeasureTheory.Integral.IntegrableOn
 
 public section
 
@@ -30,15 +31,36 @@ variable {m m0 : MeasurableSpace α} {μ : Measure α} {f g : α → F'} {s : Se
 --     (integrable_toReal_of_lintegral_ne_top hf_meas hf)
 --     (fun s hs hs_fin ↦ integrable_toReal_of_lintegral_ne_top _ _) _ _
 
+open Measure Integrable
+
+variable [IsFiniteMeasure μ] {g : α → ℝ≥0∞}
+
+--TODO : Generalise to SigmaFinite (μ.trim hm) ?
+
 /-- **Uniqueness of the conditional expectation**
 If a function is a.e. `m`-measurable, verifies an integrability condition and has same integral
 as `f` on all `m`-measurable sets, then it is a.e. equal to `μ[f|hm]`. -/
 theorem toReal_ae_eq_indicator_condExp_of_forall_setLIntegral_eq (hm : m ≤ m0)
-    [SigmaFinite (μ.trim hm)] {g : α → ℝ≥0∞} {s : Set α} (hs : μ s ≠ ⊤)
+    {s : Set α} (hs₀ : MeasurableSet[m] s) (hgm : AEStronglyMeasurable[m] g μ)
     (hg_int_finite : ∀ t, MeasurableSet[m] t → μ t < ∞ → ∫⁻ a in t, g a ∂μ ≠ ⊤)
-    (hg_eq : ∀ t : Set α, MeasurableSet[m] t → μ t < ∞ → ∫⁻ a in t, g a ∂μ = μ (s ∩ t))
-    (hgm : AEStronglyMeasurable[m] g μ) : (fun a ↦ (g a).toReal) =ᵐ[μ] μ[s.indicator 1|m] := by
-  refine ae_eq_condExp_of_forall_setIntegral_eq hm ?_ ?_ ?_ ?_ <;> sorry
+    (hg_eq : ∀ t : Set α, MeasurableSet[m0] t → μ t < ∞ → ∫⁻ a in t, g a ∂μ = μ (s ∩ t)) :
+    (fun a ↦ (g a).toReal) =ᵐ[μ] μ[s.indicator 1|m] := by
+  have : AEStronglyMeasurable[m0] g μ  := (hgm.mono hm).aemeasurable.aestronglyMeasurable
+  refine ae_eq_condExp_of_forall_setIntegral_eq (f := (s.indicator fun _ ↦ (1 : ℝ)))
+    hm (by fun_prop (disch := measurability)) (by fun_prop (disch := measurability))
+    (fun t ht hμt ↦ ?_) ?_
+  · have hg_ae : ∀ᵐ x ∂μ.restrict t, g x < ∞ := ae_lt_top'
+      (AEMeasurable.restrict (hgm.mono hm).aemeasurable)
+        (by simpa [Measure.restrict_restrict (hm _ ht)] using hg_int_finite t ht hμt)
+    calc
+      ∫ x in t, (g x).toReal ∂μ = ∫ x in t ∩ s, (1 : ℝ) ∂μ := by
+        simp [integral_toReal (AEMeasurable.restrict (hgm.mono hm).aemeasurable) hg_ae,
+          hg_eq t (hm t ht) hμt,measureReal_def _ _, Set.inter_comm s t, smul_eq_mul, mul_one]
+      _ = ∫ x in t, (s.indicator fun _ : α => (1 : ℝ)) x ∂μ := by
+            rw [← setIntegral_indicator (s := t) (μ := μ) (hm s hs₀)]
+  · exact (stronglyMeasurable_iff_measurable.2
+    (Measurable.ennreal_toReal hgm.stronglyMeasurable_mk.measurable)).aestronglyMeasurable.congr
+      (EventuallyEq.fun_comp hgm.ae_eq_mk ENNReal.toReal).symm
 
 lemma toReal_ae_eq_indicator_condExp_iff_forall_meas_inter_eq (hm : m ≤ m0)
     [SigmaFinite (μ.trim hm)] {g : α → ℝ≥0∞} {s : Set α} :
