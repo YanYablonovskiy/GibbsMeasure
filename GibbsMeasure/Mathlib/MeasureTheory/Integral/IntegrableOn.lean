@@ -2,9 +2,6 @@ module
 
 public import Mathlib.MeasureTheory.Integral.IntegrableOn
 
-
-
-
 open ENNReal MeasureTheory Integrable
 
 attribute [fun_prop] MeasureTheory.IntegrableOn
