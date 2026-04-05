@@ -5,37 +5,17 @@ public import Mathlib.MeasureTheory.Function.ConditionalExpectation.Basic
 
 public section
 
-open TopologicalSpace MeasureTheory.Lp Filter
+open TopologicalSpace MeasureTheory Lp Filter Measure Integrable
 open scoped ENNReal Topology MeasureTheory
 
 namespace MeasureTheory
 variable {α F F' 𝕜 : Type*} {p : ℝ≥0∞} [RCLike 𝕜]
-  [NormedAddCommGroup F]
-  [NormedSpace 𝕜 F]
-  [NormedAddCommGroup F']
-  [NormedSpace 𝕜 F'] [NormedSpace ℝ F'] [CompleteSpace F']
-
-variable {m m0 : MeasurableSpace α} {μ : Measure α} {f g : α → F'} {s : Set α}
-
--- /-- **Uniqueness of the conditional expectation**
--- If a function is a.e. `m`-measurable, verifies an integrability condition and has same integral
--- as `f` on all `m`-measurable sets, then it is a.e. equal to `μ[f|hm]`. -/
--- theorem toReal_ae_eq_condExp_toReal_of_forall_setLIntegral_eq (hm : m ≤ m0)
---     [SigmaFinite (μ.trim hm)] {f g : α → ℝ≥0∞} (hf_meas : AEMeasurable f μ)
---     (hf : ∫⁻ a, f a ∂μ ≠ ⊤)
---     (hg_int_finite : ∀ s, MeasurableSet[m] s → μ s < ∞ → ∫⁻ a in s, g a ∂μ ≠ ⊤)
---     (hg_eq : ∀ s : Set α, MeasurableSet[m] s → μ s < ∞ → ∫⁻ x in s, g x ∂μ = ∫⁻ x in s, f x ∂μ)
---     (hgm : AEStronglyMeasurable[m] g μ) :
---     (fun a ↦ (g a).toReal) =ᵐ[μ] μ[fun a ↦ (f a).toReal|m] := by
---   refine ae_eq_condExp_of_forall_setIntegral_eq hm
---     (integrable_toReal_of_lintegral_ne_top hf_meas hf)
---     (fun s hs hs_fin ↦ integrable_toReal_of_lintegral_ne_top _ _) _ _
-
-open Measure Integrable
-
-variable [IsFiniteMeasure μ]
+  [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+  [NormedAddCommGroup F'] [NormedSpace 𝕜 F'] [NormedSpace ℝ F'] [CompleteSpace F']
+  {m m0 : MeasurableSpace α} {μ : Measure α} {f g : α → F'} {s : Set α}
 
 --TODO : Generalise to SigmaFinite (μ.trim hm) ?
+variable [IsFiniteMeasure μ]
 
 /-- **Uniqueness of the conditional expectation**
 If a function is a.e. `m`-measurable, verifies an integrability condition and has same integral
