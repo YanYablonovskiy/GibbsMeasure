@@ -5,8 +5,7 @@ public import Mathlib.MeasureTheory.Function.ConditionalExpectation.Basic
 
 public section
 
-open TopologicalSpace MeasureTheory Lp Filter Measure Integrable
-open scoped ENNReal Topology MeasureTheory
+open scoped ENNReal
 
 namespace MeasureTheory
 variable {α F F' 𝕜 : Type*} {p : ℝ≥0∞} [RCLike 𝕜]
