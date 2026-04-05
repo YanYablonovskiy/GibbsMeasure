@@ -45,7 +45,7 @@ theorem toReal_ae_eq_indicator_condExp_of_forall_setLIntegral_eq (hm : m ≤ m0)
     (hg_int_finite : ∀ t, MeasurableSet[m] t → μ t < ∞ → ∫⁻ a in t, g a ∂μ ≠ ⊤)
     (hg_eq : ∀ t : Set α, MeasurableSet[m0] t → μ t < ∞ → ∫⁻ a in t, g a ∂μ = μ (s ∩ t)) :
     (fun a ↦ (g a).toReal) =ᵐ[μ] μ[s.indicator 1|m] := by
-  have : AEStronglyMeasurable[m0] g μ := (hgm.mono hm).aemeasurable.aestronglyMeasurable
+  have : AEStronglyMeasurable[m0] g μ := hgm.mono hm
   refine ae_eq_condExp_of_forall_setIntegral_eq (f := (s.indicator fun _ ↦ (1 : ℝ)))
     hm (by fun_prop (disch := measurability)) (by fun_prop (disch := measurability))
     (fun t ht hμt ↦ ?_) ?_
